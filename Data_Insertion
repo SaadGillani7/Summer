@@ -1,0 +1,50 @@
+import motor.motor_asyncio
+import asyncio
+
+# MongoDB connection details
+MONGO_DETAILS = "mongodb://localhost:27017"
+client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
+database = client.vehicle_store
+cars_collection = database.get_collection("cars")
+bikes_collection = database.get_collection("bikes")
+
+# Sample data
+cars = [
+    {"make": "Toyota", "model": "Corolla", "year": 2020, "price": 20000},
+    {"make": "Honda", "model": "Civic", "year": 2019, "price": 22000},
+    {"make": "Ford", "model": "Mustang", "year": 2021, "price": 35000},
+    {"make": "Chevrolet", "model": "Malibu", "year": 2018, "price": 18000},
+    {"make": "BMW", "model": "3 Series", "year": 2021, "price": 40000},
+    {"make": "Audi", "model": "A4", "year": 2020, "price": 39000},
+    {"make": "Mercedes", "model": "C Class", "year": 2021, "price": 42000},
+    {"make": "Hyundai", "model": "Elantra", "year": 2019, "price": 19000},
+    {"make": "Kia", "model": "Optima", "year": 2018, "price": 17000},
+    {"make": "Nissan", "model": "Altima", "year": 2020, "price": 21000}
+]
+
+bikes = [
+    {"make": "Yamaha", "model": "YZF R1", "year": 2020, "price": 15000},
+    {"make": "Honda", "model": "CBR 600RR", "year": 2019, "price": 12000},
+    {"make": "Suzuki", "model": "GSX-R1000", "year": 2021, "price": 16000},
+    {"make": "Kawasaki", "model": "Ninja 650", "year": 2018, "price": 8000},
+    {"make": "Ducati", "model": "Panigale V2", "year": 2021, "price": 18000},
+    {"make": "BMW", "model": "S1000RR", "year": 2020, "price": 17000},
+    {"make": "Harley-Davidson", "model": "Street 750", "year": 2019, "price": 9000},
+    {"make": "Triumph", "model": "Street Triple", "year": 2018, "price": 11000},
+    {"make": "KTM", "model": "Duke 390", "year": 2020, "price": 6000},
+    {"make": "Royal Enfield", "model": "Interceptor 650", "year": 2019, "price": 7000}
+]
+
+async def populate_db():
+    # Clear existing data
+    await cars_collection.delete_many({})
+    await bikes_collection.delete_many({})
+
+    # Insert new data
+    await cars_collection.insert_many(cars)
+    await bikes_collection.insert_many(bikes)
+
+    print("Database populated with sample data")
+
+if __name__ == "__main__":
+    asyncio.run(populate_db())
